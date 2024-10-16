@@ -11,7 +11,6 @@ if (!isRunningRspack && !isRunningWebpack) {
 
 // "isolatedModules": true, in tsconfig.json ✅
 // pnpm run type-check passes ✅
-// tried with rspackFuture.newResolver = true it didn't changed anything
 
 /**
  * @type {import('webpack').Configuration | import('@rspack/cli').Configuration}
@@ -23,12 +22,12 @@ const config = {
 		main: "./src/test.ts",
 	},
 	resolve: {
-		// 1. tsconfig object fails with `Module not found: Can't resolve 'src/calc' in os-path-to-this-file`
+		extensions: ['...', '.ts', '.tsx', '.js', '.jsx', '.json'],
+		// 1. tsconfig object fails with `Module not found: Can't resolve './src/test.ts' in os-path-to-this-file`
 		tsConfig: {
 			configFile: path.resolve(__dirname, "./tsconfig.json"),
-			references: "auto",
 		},
-		// 2. tsconfig inline fails with `Module not found: Can't resolve 'src/calc' in os-path-to-this-file`
+		// 2. tsconfig inline fails with `Module not found: Can't resolve './src/test.ts' in os-path-to-this-file`
 		// tsConfig: path.resolve(__dirname, './tsconfig.json'),
 		// 3. alias doesn't work also
 		// alias: {
@@ -45,9 +44,6 @@ const config = {
 	},
 	experiments: {
 		css: true,
-		rspackFuture: {
-			newResolver: true,
-		},
 	},
 	module: {
 		rules: [
